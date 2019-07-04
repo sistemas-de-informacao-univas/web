@@ -84,6 +84,51 @@ app.get('/remover/:id', function(req, res) {
 	res.redirect('')
 });
 
+app.get('/:id', function(req, res) {
+	
+	var id = req.params.id;
+
+	var sql = "SELECT * FROM agenda WHERE id = " + id;
+
+	var rows = conSync.query(sql);
+	var nome = rows[0].nome;
+	var telefone = rows[0].telefone;
+	
+	var html;
+	html = "<html>";
+	html += "<body>";
+	html += "<div align = 'center' width='50%'>";
+	html += "<form action='/atualizar' method='post'><br>";
+	html += "<h1>Editando dados na Agenda de Clientes</h1><br>";
+	html += " Nome: <input type='text' name='nome' value='" + nome + "'> ";
+	html += " Telefone: <input type='text' name='telefone' value='" + telefone + "'> ";
+	html += " <input type='hidden' name='id' value='" + id + "'>";
+	html += " <input type='submit' value='Atualizar'>";
+	html += " <input type='button' value='Cancelar' onClick='history.back();'>";
+
+	res.send(html);
+
+});
+
+
+app.post('/atualizar', function(req, res){
+	var post = {
+	    nome: req.body.nome,
+	    telefone: req.body.telefone
+	};
+
+	var id = req.body.id;
+ 
+	con.query('UPDATE agenda set ? where id = ?', [post, id], function(erro, result) {
+	    if (erro) {
+	        console.log(erro.message);
+	    } else {
+	        console.log('Registro atualizado com sucesso!');
+	    }
+    });
+	res.redirect('')
+});
+
 app.listen(3000, function(){
 	console.log('Servidor pronto');
 });
