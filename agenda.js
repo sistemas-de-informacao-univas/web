@@ -70,6 +70,19 @@ app.get('/inserir', function(req, res){
 
 });
 
+app.get('/remover/:id', function(req, res) {
+	
+	var id = req.params.id;
+
+    con.query('DELETE FROM agenda WHERE id = ' + id, function(erro, result) {
+	    if (erro) {
+	        console.log(erro.message);
+	    } else {
+	        console.log('Registro removido com sucesso!');
+	    }
+    });
+	res.redirect('')
+});
 
 app.listen(3000, function(){
 	console.log('Servidor pronto');
